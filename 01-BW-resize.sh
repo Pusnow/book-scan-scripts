@@ -25,7 +25,12 @@ H=$(identify -format '%h' "$file")
 
 START_W=$((($W - $MIN_W) / 2))
 START_H=$((($H - $MIN_H) / 2))
-convert "$file" -crop "$MIN_W"x"$MIN_H"+"$START_W"+"$START_H" "final_$file.png"
+convert "$file"  -fill black -draw 'point 1,1' "tmp1_$file.tiff"
+convert "tmp1_$file.tiff" -crop "$MIN_W"x"$MIN_H"+"$START_W"+"$START_H" -monochrome -compress group4  "tmp2_$file.tiff"
+convert "tmp2_$file.tiff" -fill white -draw 'point 1,1' "final_$file.tiff"
+
+rm "tmp1_$file.tiff"
+rm "tmp2_$file.tiff"
 
 
 done
